@@ -4,3 +4,4 @@ gevent==24.2.1
 gevent-websocket==0.10.1
 supabase==2.5.0
 python-dotenv==1.0.1
+gunicorn
