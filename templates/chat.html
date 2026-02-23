@@ -2,7 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>TeamChat · Salon</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -10,6 +13,7 @@
 </head>
 <body class="chat-page">
 
+<!-- ── Header ── -->
 <header>
   <div class="header-left">
     <span class="header-logo">◈ TeamChat</span>
@@ -17,13 +21,26 @@
   </div>
   <div class="header-right">
     <span class="my-pseudo">{{ pseudo }}</span>
+
+    <!-- Bouton "Connectés" visible uniquement sur mobile -->
+    <button class="drawer-btn" id="drawer-btn" onclick="toggleDrawer()">
+      <span class="online-dot"></span>
+      <span id="online-count">0</span> en ligne
+    </button>
+
     <a class="logout-btn" href="/logout">Quitter</a>
   </div>
 </header>
 
+<!-- ── Drawer mobile : liste des connectés ── -->
+<div class="mobile-drawer" id="mobile-drawer">
+  <p class="mobile-drawer-title">Connectés</p>
+  <div class="mobile-users" id="mobile-users"></div>
+</div>
+
 <div class="main">
 
-  <!-- ── Sidebar ── -->
+  <!-- ── Sidebar desktop ── -->
   <aside class="sidebar">
     <div class="sidebar-section">
       <p class="sidebar-title">Connectés</p>
@@ -33,25 +50,22 @@
     <div class="voice-section">
       <p class="sidebar-title">Voix</p>
 
-      <!-- Sélecteur de micro -->
       <div class="mic-select-wrap">
         <span class="mic-select-label">🎙 Micro</span>
-        <select id="mic-select"></select>
+        <select class="mic-select" id="mic-select-desktop"></select>
       </div>
 
-      <!-- Rejoindre / Raccrocher -->
-      <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" style="margin-top:10px;">
-        <span class="mic-icon">📞</span>
-        <span id="voice-label">Rejoindre l'appel</span>
+      <button class="voice-btn" onclick="toggleVoice()" style="margin-top:10px;">
+        <span class="voice-icon">📞</span>
+        <span class="voice-label">Rejoindre l'appel</span>
       </button>
 
-      <!-- Mute (affiché uniquement en appel) -->
-      <button class="mute-btn" id="mute-btn" onclick="toggleMute()" title="Couper le micro">
-        🎤 Micro actif
+      <button class="mute-btn" onclick="toggleMute()">
+        <span class="mute-icon">🎤</span>
+        <span class="mute-label">Micro actif</span>
       </button>
 
-      <!-- Indicateurs audio des pairs -->
-      <div class="peer-audio-list" id="peer-audio-list"></div>
+      <div class="peer-audio-list" id="peer-audio-desktop"></div>
     </div>
   </aside>
 
@@ -82,7 +96,7 @@
       <textarea
         class="message-input"
         id="msg-input"
-        placeholder="Écrire un message… (Entrée pour envoyer)"
+        placeholder="Message… (Entrée pour envoyer)"
         rows="1"
       ></textarea>
       <button class="send-btn" onclick="sendMessage()">↑</button>
@@ -91,6 +105,24 @@
 
 </div>
 
+<!-- ── Barre voix mobile (fixée en bas) ── -->
+<div class="mobile-voice-bar">
+  <div class="mic-select-wrap">
+    <select class="mic-select" id="mic-select-mobile"></select>
+  </div>
+
+  <button class="voice-btn" onclick="toggleVoice()">
+    <span class="voice-icon">📞</span>
+    <span class="voice-label">Rejoindre</span>
+  </button>
+
+  <button class="mute-btn" onclick="toggleMute()" title="Mute">
+    <span class="mute-icon">🎤</span>
+    <span class="mute-label"></span>
+  </button>
+</div>
+
+<!-- Éléments audio injectés par JS -->
 <div id="audio-container" style="display:none;"></div>
 
 <script>const MY_PSEUDO = {{ pseudo | tojson }};</script>
