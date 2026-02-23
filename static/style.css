@@ -528,3 +528,67 @@ header {
 }
 
 .send-btn:active { transform: scale(.95); }
+
+/* ── Sélecteur de micro ── */
+.mic-select-wrap {
+  margin-top: 10px;
+}
+
+.mic-select-label {
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+#mic-select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: .75rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a5a7a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+#mic-select:focus { border-color: var(--accent); }
+
+/* ── Bouton mute ── */
+.mute-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: .82rem;
+  cursor: pointer;
+  display: none; /* affiché uniquement en appel */
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all .2s;
+}
+
+.mute-btn:hover { border-color: var(--accent2); }
+
+.mute-btn.muted {
+  background: rgba(255,106,155,.1);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
